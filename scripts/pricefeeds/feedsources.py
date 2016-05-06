@@ -376,6 +376,7 @@ class Huobi(FeedSource) :
         return feed
 
 
+
 class CoinmarketcapAltcap(FeedSource) :
     def __init__(self, *args, **kwargs) :
         super().__init__(*args, **kwargs)

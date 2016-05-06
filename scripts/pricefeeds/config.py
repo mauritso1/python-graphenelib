@@ -111,24 +111,14 @@ asset_config = {"default" : {  # DEFAULT BEHAVIOR
                 "ALTCAP" : {
                     "metric" : "weighted",
                     "sources" : ["coinmarketcap",
-                                 "coincap",
-                                 "poloniex",
-                                 "ccedk",
-                                 "bittrex",
-                                 "btc38",
-                                 "yunbi",],
+                                 "coincap"],
                     "core_exchange_factor"          : 0.95,
 
                 },
                 "ALTCAP.X" : {
                     "metric" : "weighted",
                     "sources" : ["coinmarketcap",
-                                 "coincap",
-                                 "poloniex",
-                                 "ccedk",
-                                 "bittrex",
-                                 "btc38",
-                                 "yunbi",],
+                                 "coincap"],
                     "core_exchange_factor"          : 0.95,
                 },
                 # Exchanges trading BTC/BTS directly
@@ -186,6 +176,7 @@ secondary_mpas = {"TCNY" : {"sameas" : "CNY"},
 #                script on error
 ################################################################################
 feedSources = {}
+
 feedSources["coinmarketcap"]    = feedsources.CoinmarketcapAltcap(quotes=["ALTCAP", "ALTCAP.X"],
                                                                     quoteName={"ALTCAP":"ALTCAP", "ALTCAP.X":"ALTCAP.X"},
                                                                     bases=["BTS"],
@@ -195,6 +186,7 @@ feedSources["coincap"]    = feedsources.CoincapAltcap(quotes=["ALTCAP", "ALTCAP.
                                                                     quoteName={"ALTCAP":"ALTCAP", "ALTCAP.X":"ALTCAP.X"},
                                                                     bases=["BTS"],
                                                                     allowFailure=True)
+
 
 feedSources["yahoo"]    = feedsources.Yahoo(scaleVolumeBy=1e7,
                                             quotes=["XAG", "XAU", "TRY", "SGD", "HKD", "NZD", "CNY", "MXN", "CAD", "CHF", "AUD", "GBP", "JPY", "EUR", "USD", "KRW"],
