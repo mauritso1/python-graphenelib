@@ -376,6 +376,39 @@ class Huobi(FeedSource) :
         return feed
 
 
+class Coinmarketcap(FeedSource) :
+    def __init__(self, *args, **kwargs) :
+        super().__init__(*args, **kwargs)
+
+    def fetch(self):
+        feed  = {}
+
+        try :
+            cmc_ticker = requests.get('https://api.coinmarketcap.com/v1/ticker/').json()
+            cmc_alts_caps = [float(coin['market_cap_usd']) for coin in cmc_ticker if coin['symbol'] != "BTC"]
+            cmc_alts_capsX = [float(coin['market_cap_usd']) for coin in cmc_ticker if
+                      coin['rank'] <= 11 and coin['symbol'] != "BTC"]
+            cmc_altCap = sum(cmc_alts_caps)
+            cmc_altCapX = sum(cmc_alts_capsX)
+            cmc_btcCap = next((coin['market_cap_usd'] for coin in cmc_ticker if coin["symbol"] == "BTC"))
+
+            usdBTC = next((coin['price_usd'] for coin in cmc_ticker if coin["symbol"] == "BTC"))
+            usdBTS = next((coin['price_usd'] for coin in cmc_ticker if coin["symbol"] == "BTS"))
+            BTC_BTS = usdBTC / usdBTS
+
+            BTC_altcap_price = cmc_btcCap / cmc_altCap 
+            BTC_altcapx_price = cmc_btcCap / cmc_altCapX
+            feed[base]['ALTCAP'] = {"price"  : (BTC_altcap_price / BTC_BTS),
+                                    "volume" : 1.0}
+            feed[base]['ALTCAP.X'] = {"price"  : (BTC_altcapx_price / BTC_BTS),
+                                     "volume" : 1.0}
+        except Exception as e:
+            print("\nError fetching results from {1}! ({0})".format(str(e), type(self).__name__))
+            if not self.allowFailure:
+                sys.exit("\nExiting due to exchange importance!")
+            return
+        return feed
+
 class Okcoin(FeedSource) :
     def __init__(self, *args, **kwargs) :
         super().__init__(*args, **kwargs)
